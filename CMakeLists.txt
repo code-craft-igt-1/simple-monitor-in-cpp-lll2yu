@@ -26,6 +26,7 @@ add_executable(
 target_link_libraries(
     test-monitor
   GTest::gtest_main
+  GTest::gmock_main
 )
 
 include(GoogleTest)
