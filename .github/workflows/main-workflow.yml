@@ -18,7 +18,7 @@ jobs:
     - name: setup and run linter
       run: |
         pip install cpplint
-        cpplint  --filter=-legal,-build/c++11 --linelength=100 *.cpp *.h
+        cpplint  --filter=-legal,-build/c++11 --linelength=100 *.cpp include/*.h
 
     - name: build
       run: |

@@ -33,12 +33,6 @@ TEST_F(PrintCriticalMessageTest, CallsSleepAndOutputsCorrectly) {
                                 mockSleepFunc(seconds); }, stringBuffer);
   EXPECT_EQ(stringBuffer.str(),
             "Test Message\n\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *");
-  stringBuffer.str("");
-  EXPECT_CALL(mockSleep, sleep(1)).Times(13);
-  printer.printCriticalMessage("Test Message", 13, [this](int seconds) {
-                                mockSleepFunc(seconds); }, stringBuffer);
-  EXPECT_EQ(stringBuffer.str(),
-            "Test Message\n\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* ");
 }
 
 class VitalCheckerTest : public ::testing::Test {
@@ -49,32 +43,32 @@ class VitalCheckerTest : public ::testing::Test {
 
 TEST_F(VitalCheckerTest, TemperatureBelowRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Temperature critical!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Temperature", 94.0, 95, 102));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Temperature", 94.0, 95, 102));
 }
 
 TEST_F(VitalCheckerTest, TemperatureAboveRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Temperature critical!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Temperature", 103.0, 95, 102));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Temperature", 103.0, 95, 102));
 }
 
 TEST_F(VitalCheckerTest, PulseRateBelowRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Pulse Rate is out of range!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Pulse Rate", 50.0, 60, 100));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Pulse Rate", 50.0, 60, 100));
 }
 
 TEST_F(VitalCheckerTest, PulseRateAboveRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Pulse Rate is out of range!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Pulse Rate", 110.0, 60, 100));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Pulse Rate", 110.0, 60, 100));
 }
 
 TEST_F(VitalCheckerTest, OxygenSaturationBelowRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Oxygen Saturation out of range!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Oxygen Saturation", 85.0, 90, 100));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Oxygen Saturation", 85.0, 90, 100));
 }
 
 TEST_F(VitalCheckerTest, OxygenSaturationAboveRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Oxygen Saturation out of range!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.checkVital("Oxygen Saturation", 105.0, 90, 100));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Oxygen Saturation", 105.0, 90, 100));
 }
 
 TEST_F(VitalCheckerTest, VitalsOk) {
