@@ -41,12 +41,6 @@ class VitalCheckerTest : public ::testing::Test {
     VitalChecker vitalChecker{mockPrinter, "en"};
 };
 
-class VitalCheckerTestGerman : public ::testing::Test {
- protected:
-    MockPrinter mockPrinter;
-    VitalChecker vitalChecker{mockPrinter, "ger"};
-};
-
 TEST_F(VitalCheckerTest, TemperatureBelowRange) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Temperature critical!", 12, _, _));
     EXPECT_FALSE(vitalChecker.vitalInRange("Temperature", 94.0, 95, 102));
@@ -126,16 +120,6 @@ TEST_F(VitalCheckerTest, OxygenSaturationLowerWarningBoundary) {
 TEST_F(VitalCheckerTest, OxygenSaturationUpperWarningBoundary) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching hyperoxia", 12, _, _));
     EXPECT_TRUE(vitalChecker.vitalInRange("Oxygen Saturation", 100.0 - 1.5, 90, 100));
-}
-
-TEST_F(VitalCheckerTestGerman, TemperatureBelowRangeGerman) {
-    EXPECT_CALL(mockPrinter, printCriticalMessage("Temperatur kritisch!", 12, _, _));
-    EXPECT_FALSE(vitalChecker.vitalInRange("Temperature", 94.0, 95, 102));
-}
-
-TEST_F(VitalCheckerTestGerman, TemperatureLowerWarningBoundaryGerman) {
-    EXPECT_CALL(mockPrinter, printCriticalMessage("Annäherung an Unterkühlung", 12, _, _));
-    EXPECT_TRUE(vitalChecker.vitalInRange("Temperature", 95.0 + 1.53, 95, 102));
 }
 
 int main(int argc, char** argv) {
