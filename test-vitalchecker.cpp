@@ -33,6 +33,12 @@ TEST_F(PrintCriticalMessageTest, CallsSleepAndOutputsCorrectly) {
                                 mockSleepFunc(seconds); }, stringBuffer);
   EXPECT_EQ(stringBuffer.str(),
             "Test Message\n\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *");
+  stringBuffer.str("");
+  EXPECT_CALL(mockSleep, sleep(1)).Times(13);
+  printer.printCriticalMessage("Test Message", 13, [this](int seconds) {
+                                mockSleepFunc(seconds); }, stringBuffer);
+  EXPECT_EQ(stringBuffer.str(),
+            "Test Message\n\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* \r *\r* ");
 }
 
 class VitalCheckerTest : public ::testing::Test {
