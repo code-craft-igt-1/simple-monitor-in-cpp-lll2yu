@@ -43,9 +43,9 @@ void VitalChecker::checkWarning(float vitalValue,
                                 float lowerWarningLimit,
                                 float upperWarningLimit,
                                 const std::pair<std::string, std::string>& warnings) const {
-    if (vitalValue < lowerWarningLimit) {
+    if (vitalValue <= lowerWarningLimit) {
         m_printer.printCriticalMessage(warnings.first, 12);
-    } else if (vitalValue > upperWarningLimit) {
+    } else if (vitalValue >= upperWarningLimit) {
         m_printer.printCriticalMessage(warnings.second, 12);
     }
 }

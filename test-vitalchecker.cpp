@@ -38,7 +38,13 @@ TEST_F(PrintCriticalMessageTest, CallsSleepAndOutputsCorrectly) {
 class VitalCheckerTest : public ::testing::Test {
  protected:
     MockPrinter mockPrinter;
-    VitalChecker vitalChecker{mockPrinter};
+    VitalChecker vitalChecker{mockPrinter, "en"};
+};
+
+class VitalCheckerTestGerman : public ::testing::Test {
+ protected:
+    MockPrinter mockPrinter;
+    VitalChecker vitalChecker{mockPrinter, "ger"};
 };
 
 TEST_F(VitalCheckerTest, TemperatureBelowRange) {
@@ -90,6 +96,46 @@ TEST_F(VitalCheckerTest, VitalsNotOkPulseRateAndOxygenSaturation) {
     EXPECT_CALL(mockPrinter, printCriticalMessage("Pulse Rate is out of range!", 12, _, _));
     EXPECT_CALL(mockPrinter, printCriticalMessage("Oxygen Saturation out of range!", 12, _, _));
     EXPECT_FALSE(vitalChecker.vitalsOk(98.0, 50.0, 85.0));
+}
+
+TEST_F(VitalCheckerTest, TemperatureLowerWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching hypothermia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Temperature", 96.53, 95, 102));
+}
+
+TEST_F(VitalCheckerTest, TemperatureUpperWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching hyperthermia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Temperature", 100.47, 95, 102));
+}
+
+TEST_F(VitalCheckerTest, PulseRateLowerWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching bradycardia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Pulse Rate", 60.0 + 1.5, 60, 100));
+}
+
+TEST_F(VitalCheckerTest, PulseRateUpperWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching tachycardia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Pulse Rate", 100.0 - 1.5, 60, 100));
+}
+
+TEST_F(VitalCheckerTest, OxygenSaturationLowerWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching hypoxemia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Oxygen Saturation", 90.0 + 1.5, 90, 100));
+}
+
+TEST_F(VitalCheckerTest, OxygenSaturationUpperWarningBoundary) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Approaching hyperoxia", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Oxygen Saturation", 100.0 - 1.5, 90, 100));
+}
+
+TEST_F(VitalCheckerTestGerman, TemperatureBelowRangeGerman) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Temperatur kritisch!", 12, _, _));
+    EXPECT_FALSE(vitalChecker.vitalInRange("Temperature", 94.0, 95, 102));
+}
+
+TEST_F(VitalCheckerTestGerman, TemperatureLowerWarningBoundaryGerman) {
+    EXPECT_CALL(mockPrinter, printCriticalMessage("Annäherung an Unterkühlung", 12, _, _));
+    EXPECT_TRUE(vitalChecker.vitalInRange("Temperature", 95.0 + 1.53, 95, 102));
 }
 
 int main(int argc, char** argv) {
