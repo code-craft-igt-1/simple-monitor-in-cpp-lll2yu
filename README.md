@@ -1,5 +1,9 @@
 # Programming Paradigms
 
+#### Implemented extentions 
+- Extension 1: Early Warning
+- Extension 2: Support a language in addition to English
+
 Health Monitoring Systems
 
 [Here is an article that helps to understand the Adult Vital Signs](https://en.wikipedia.org/wiki/Vital_signs)

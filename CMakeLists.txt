@@ -16,9 +16,28 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+find_package(Boost REQUIRED COMPONENTS locale)
+
+set(LANGUAGES en ger ja)
+set(PO_DIR ${CMAKE_SOURCE_DIR}/locales)
+set(MO_DIR ${CMAKE_BINARY_DIR}/locales)
+
+file(MAKE_DIRECTORY ${MO_DIR})
+foreach(LANG ${LANGUAGES})
+    add_custom_command(
+        OUTPUT ${MO_DIR}/${LANG}/LC_MESSAGES/vitalchecker.mo
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${MO_DIR}/${LANG}/LC_MESSAGES
+        COMMAND msgfmt -o ${MO_DIR}/${LANG}/LC_MESSAGES/vitalchecker.mo ${PO_DIR}/${LANG}/vitalchecker.po
+        DEPENDS ${PO_DIR}/${LANG}/vitalchecker.po
+        COMMENT "Compiling ${LANG} .po to .mo"
+        VERBATIM
+    )
+    add_custom_target(${LANG}_mo ALL DEPENDS ${MO_DIR}/${LANG}/LC_MESSAGES/vitalchecker.mo)
+endforeach()
+
 enable_testing()
 
-file(GLOB SOURCES "*.cpp")
+file(GLOB SOURCES "*.cpp" "include/*.h")
 add_executable(
     test-monitor
   ${SOURCES}
@@ -26,7 +45,10 @@ add_executable(
 target_link_libraries(
     test-monitor
   GTest::gtest_main
+  GTest::gmock_main
+  Boost::locale
 )
 
+include_directories(${Boost_INCLUDE_DIRS})
 include(GoogleTest)
 gtest_discover_tests(test-monitor)

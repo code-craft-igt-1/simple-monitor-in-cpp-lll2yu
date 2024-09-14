@@ -13,12 +13,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y gcovr
-    - name: setup cmake
-      run: sudo apt install cmake
+    - name: setup cmake and boost
+      run: sudo apt install -y cmake libboost-locale-dev gettext
     - name: setup and run linter
       run: |
         pip install cpplint
-        cpplint  --filter=-legal,-build/c++11 --linelength=100 *.cpp *.h
+        cpplint  --filter=-legal,-build/c++11 --linelength=100 *.cpp include/*.h
 
     - name: build
       run: |
@@ -26,7 +26,9 @@ jobs:
         cmake --build build
       
     - name: run
-      run: build/test-monitor
+      run: |
+        cd build
+        ./test-monitor
 
     - name: collect coverage
       run: gcovr --gcov-exclude=".*test.*" -r . --html --html-details -o coverage.html --print-summary

@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Temperature critical!"
+msgstr "温度が危険です！"
+
+msgid "Pulse Rate is out of range!"
+msgstr "脈拍が範囲外です！"
+
+msgid "Oxygen Saturation out of range!"
+msgstr "酸素飽和度が範囲外です！"
+
+msgid "Approaching hypothermia"
+msgstr "低体温症に近づいています"
+
+msgid "Approaching hyperthermia"
+msgstr "高体温症に近づいています"
+
+msgid "Approaching bradycardia"
+msgstr "徐脈に近づいています"
+
+msgid "Approaching tachycardia"
+msgstr "頻脈に近づいています"
+
+msgid "Approaching hypoxemia"
+msgstr "低酸素血症に近づいています"
+
+msgid "Approaching hyperoxia"
+msgstr "高酸素症に近づいています"
