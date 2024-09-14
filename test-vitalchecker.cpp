@@ -59,7 +59,7 @@ class VitalCheckerCriticalTest : public ::testing::TestWithParam<
                                         std::string,
                                         std::string>> {
  protected:
-    MockPrinter mockPrinter;
+    MockPrinter mockPrinterCritical;
     std::string language;
     std::string vitalName;
     std::string expectedMessage;
@@ -70,9 +70,9 @@ class VitalCheckerCriticalTest : public ::testing::TestWithParam<
 };
 
 TEST_P(VitalCheckerCriticalTest, CriticalMessages) {
-    VitalChecker vitalChecker{mockPrinter, language};
-    EXPECT_CALL(mockPrinter, printMessage(expectedMessage, 12, _, _));
-    EXPECT_FALSE(vitalChecker.vitalInRange(vitalName, 0.0, 95, 102));
+    VitalChecker vitalCheckerCritical{mockPrinterCritical, language};
+    EXPECT_CALL(mockPrinterCritical, printMessage(expectedMessage, 12, _, _));
+    EXPECT_FALSE(vitalCheckerCritical.vitalInRange(vitalName, 0.0, 95, 102));
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -100,7 +100,7 @@ class VitalCheckerWarningTest : public ::testing::TestWithParam<
                                         float,
                                         std::string>> {
  protected:
-    MockPrinter mockPrinter;
+    MockPrinter mockPrinterWarning;
     std::string language;
     std::string vitalName;
     float lowerLimit;
@@ -119,9 +119,9 @@ class VitalCheckerWarningTest : public ::testing::TestWithParam<
 };
 
 TEST_P(VitalCheckerWarningTest, WarningMessages) {
-    VitalChecker vitalChecker{mockPrinter, language};
-    EXPECT_CALL(mockPrinter, printMessage(expectedMessage, 12, _, _));
-    EXPECT_TRUE(vitalChecker.vitalInRange(vitalName, testValue, lowerLimit, upperLimit));
+    VitalChecker vitalCheckerWarning{mockPrinterWarning, language};
+    EXPECT_CALL(mockPrinterWarning, printMessage(expectedMessage, 12, _, _));
+    EXPECT_TRUE(vitalCheckerWarning.vitalInRange(vitalName, testValue, lowerLimit, upperLimit));
 }
 
 // Define test cases for warning messages
