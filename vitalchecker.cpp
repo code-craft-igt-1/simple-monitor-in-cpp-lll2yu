@@ -1,4 +1,5 @@
 #include "include/vitalchecker.h"
+#include <boost/locale.hpp>
 
 VitalChecker::VitalChecker(const CriticalMessagePrinter& printer, const std::string& language)
     : m_printer(printer), m_language(language) {
@@ -6,30 +7,25 @@ VitalChecker::VitalChecker(const CriticalMessagePrinter& printer, const std::str
 }
 
 void VitalChecker::initializeMessages() {
+    boost::locale::generator gen;
+    gen.add_messages_path("locales");
+    gen.add_messages_domain("vitalchecker");
+    std::locale::global(gen(m_language + ".UTF-8"));
+    std::cout.imbue(std::locale());
+
     m_criticalMessages = {
-        {"en", {
-            {"Temperature", "Temperature critical!"},
-            {"Pulse Rate", "Pulse Rate is out of range!"},
-            {"Oxygen Saturation", "Oxygen Saturation out of range!"}
-        }},
-        {"ger", {
-            {"Temperature", "Temperatur kritisch!"},
-            {"Pulse Rate", "Pulsfrequenz außerhalb des Bereichs!"},
-            {"Oxygen Saturation", "Sauerstoffsättigung außerhalb des Bereichs!"}
-        }}
+        {"Temperature", boost::locale::translate("Temperature critical!")},
+        {"Pulse Rate", boost::locale::translate("Pulse Rate is out of range!")},
+        {"Oxygen Saturation", boost::locale::translate("Oxygen Saturation out of range!")}
     };
 
     m_warningMessages = {
-        {"en", {
-            {"Temperature", {"Approaching hypothermia", "Approaching hyperthermia"}},
-            {"Pulse Rate", {"Approaching bradycardia", "Approaching tachycardia"}},
-            {"Oxygen Saturation", {"Approaching hypoxemia", "Approaching hyperoxia"}}
-        }},
-        {"ger", {
-            {"Temperature", {"Annäherung an Unterkühlung", "Annäherung an Überhitzung"}},
-            {"Pulse Rate", {"Annäherung an Bradykardie", "Annäherung an Tachykardie"}},
-            {"Oxygen Saturation", {"Annäherung an Hypoxämie", "Annäherung an Hyperoxie"}}
-        }}
+        {"Temperature", {boost::locale::translate("Approaching hypothermia"),
+                         boost::locale::translate("Approaching hyperthermia")}},
+        {"Pulse Rate", {boost::locale::translate("Approaching bradycardia"),
+                        boost::locale::translate("Approaching tachycardia")}},
+        {"Oxygen Saturation", {boost::locale::translate("Approaching hypoxemia"),
+                               boost::locale::translate("Approaching hyperoxia")}}
     };
 }
 
@@ -44,9 +40,9 @@ void VitalChecker::checkWarning(float vitalValue,
                                 float upperWarningLimit,
                                 const std::pair<std::string, std::string>& warnings) const {
     if (vitalValue <= lowerWarningLimit) {
-        m_printer.printCriticalMessage(warnings.first, 12);
+        m_printer.printMessage(warnings.first, 12);
     } else if (vitalValue >= upperWarningLimit) {
-        m_printer.printCriticalMessage(warnings.second, 12);
+        m_printer.printMessage(warnings.second, 12);
     }
 }
 
@@ -57,11 +53,11 @@ bool VitalChecker::vitalInRange(const std::string& vitalName, float vitalValue,
     float upperWarningLimit = vitalUpperLimit - tolerance;
 
     if (isCritical(vitalValue, vitalLowerLimit, vitalUpperLimit)) {
-        m_printer.printCriticalMessage(m_criticalMessages.at(m_language).at(vitalName), 12);
+        m_printer.printMessage(m_criticalMessages.at(vitalName), 12);
         return false;
     }
     checkWarning(vitalValue, lowerWarningLimit, upperWarningLimit,
-                 m_warningMessages.at(m_language).at(vitalName));
+                 m_warningMessages.at(vitalName));
     return true;
 }
 

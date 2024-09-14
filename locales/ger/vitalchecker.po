@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Temperature critical!"
+msgstr "Temperatur kritisch!"
+
+msgid "Pulse Rate is out of range!"
+msgstr "Pulsfrequenz außerhalb des Bereichs!"
+
+msgid "Oxygen Saturation out of range!"
+msgstr "Sauerstoffsättigung außerhalb des Bereichs!"
+
+msgid "Approaching hypothermia"
+msgstr "Annäherung an Unterkühlung"
+
+msgid "Approaching hyperthermia"
+msgstr "Annäherung an Überhitzung"
+
+msgid "Approaching bradycardia"
+msgstr "Annäherung an Bradykardie"
+
+msgid "Approaching tachycardia"
+msgstr "Annäherung an Tachykardie"
+
+msgid "Approaching hypoxemia"
+msgstr "Annäherung an Hypoxämie"
+
+msgid "Approaching hyperoxia"
+msgstr "Annäherung an Hyperoxie"

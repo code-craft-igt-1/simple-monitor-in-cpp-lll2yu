@@ -8,7 +8,7 @@
 class CriticalMessagePrinter {
  public:
     virtual ~CriticalMessagePrinter() = default;
-    virtual void printCriticalMessage(
+    virtual void printMessage(
         const std::string& message,
         int secondsToShowMessage,
         std::function<void(int)> sleepFunc = [](int secondsToSleep) {

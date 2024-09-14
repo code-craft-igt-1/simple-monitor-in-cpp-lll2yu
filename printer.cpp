@@ -4,7 +4,7 @@
 
 using std::flush;
 
-void CriticalMessagePrinter::printCriticalMessage(
+void CriticalMessagePrinter::printMessage(
                                 const std::string& message,
                                 int secondsToShowMessage,
                                 std::function<void(int)> sleepFunc,

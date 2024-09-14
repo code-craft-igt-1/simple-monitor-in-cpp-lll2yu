@@ -18,11 +18,9 @@ class VitalChecker {
  private:
     const CriticalMessagePrinter& m_printer;
     std::string m_language;
+    std::unordered_map<std::string, std::string> m_criticalMessages;
     std::unordered_map<std::string,
-                       std::unordered_map<std::string, std::string>> m_criticalMessages;
-    std::unordered_map<std::string,
-                       std::unordered_map<std::string,
-                                          std::pair<std::string, std::string>>> m_warningMessages;
+                       std::pair<std::string, std::string>> m_warningMessages;
 
  private:
     void initializeMessages();
