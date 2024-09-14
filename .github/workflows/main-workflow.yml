@@ -26,7 +26,9 @@ jobs:
         cmake --build build
       
     - name: run
-      run: build/test-monitor
+      run: |
+        cd build
+        ./test-monitor
 
     - name: collect coverage
       run: gcovr --gcov-exclude=".*test.*" -r . --html --html-details -o coverage.html --print-summary
